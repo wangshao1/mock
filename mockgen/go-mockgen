@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+path='.'
+
+while getopts ":p:" opt
+do
+    case $opt in
+        p)
+        path=$OPTARG
+        ;;
+        ?)
+        echo "unknow params"
+        exit 1;;
+    esac
+done
+
+rm -rf $path/mocks
+mkdir mocks
+for gofile in `find $path -path $path/mocks/* -prune -o -path $path/vender/* -prune -o -type f -name "*.go" | grep -v "_test.go"`
+do
+  echo "$path/mocks/${gofile#*$path}"
+  dir=`dirname $path/mocks/${gofile#*$path}`
+  if [ ! -d $dir ]; then mkdir -p $dir; fi && touch $path/mocks/${gofile#*$path} && mockgen -source=$gofile -destination $path/mocks/${gofile#*$path} -package `basename $dir`
+done
+
+
