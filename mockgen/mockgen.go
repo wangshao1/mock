@@ -276,19 +276,21 @@ func (g *generator) Generate(pkg *model.Package, pkgName string, outputPackagePa
 	}
 	g.p("package %v", pkgName)
 	g.p("")
-	g.p("import (")
-	g.in()
-	for path, pkg := range g.packageMap {
-		if path == outputPackagePath {
-			continue
+	if len(pkg.Interfaces) > 0 {
+		g.p("import (")
+		g.in()
+		for path, pkg := range g.packageMap {
+			if path == outputPackagePath {
+				continue
+			}
+			g.p("%v %q", pkg, path)
 		}
-		g.p("%v %q", pkg, path)
+		for _, path := range pkg.DotImports {
+			g.p(". %q", path)
+		}
+		g.out()
+		g.p(")")
 	}
-	for _, path := range pkg.DotImports {
-		g.p(". %q", path)
-	}
-	g.out()
-	g.p(")")
 
 	for _, intf := range pkg.Interfaces {
 		if err := g.GenerateMockInterface(intf, outputPackagePath); err != nil {
