@@ -4,7 +4,7 @@
 
 paths='.'
 
-while getopts hp: opt
+while getopts hpo: opt
 do
     case "$opt" in
         h)
@@ -25,7 +25,7 @@ for path in ${arr[*]}
 do
     echo "Generating Mock For: $path"
     rm -rf $path/mocks && mkdir $path/mocks || exit 1
-    for gofile in `find $path -path $path/mocks/* -prune -o -path $path/vender/* -prune -o -type f -name "*.go" | grep -v "_test.go"`
+    for gofile in `find $path -path $path/mocks/* -prune -o -path $path/vendor/* -prune -o -type f -name "*.go" | grep -v "_test.go"`
     do
 #      echo "$path/mocks/${gofile#*$path}"
       dir=`dirname $path/mocks/${gofile#*$path}`
