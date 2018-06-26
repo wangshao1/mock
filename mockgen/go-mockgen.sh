@@ -4,7 +4,7 @@
 
 paths='.'
 
-while getopts hpo: opt
+while getopts hp: opt
 do
     case "$opt" in
         h)
