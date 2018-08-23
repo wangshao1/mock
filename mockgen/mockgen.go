@@ -280,6 +280,9 @@ func (g *generator) Generate(pkg *model.Package, pkgName string, outputPackagePa
 		g.p("import (")
 		g.in()
 		for path, pkg := range g.packageMap {
+			if i := strings.LastIndex(path, "/vendor/"); i != -1 {
+				path = path[i+len("/vendor/"):]
+			}
 			if path == outputPackagePath {
 				continue
 			}
